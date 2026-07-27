@@ -14,8 +14,10 @@ cask "macdir" do
     strategy :github_latest
   end
 
-  # MACOSX_DEPLOYMENT_TARGET = 14.0 in MacDir.xcodeproj.
-  depends_on macos: ">= :sonoma"
+  # MACOSX_DEPLOYMENT_TARGET = 14.0 in MacDir.xcodeproj. A bare symbol already
+  # means ">=" (Cask::DSL::DependsOn#macos= parses with comparator ">="); the
+  # explicit ">= :sonoma" string form is deprecated as of Homebrew 6.0.
+  depends_on macos: :sonoma
 
   app "MacDir.app"
 

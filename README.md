@@ -7,22 +7,27 @@ dual-pane file manager for macOS.
 
 ```sh
 brew tap illil/macdir
+brew trust --tap illil/macdir
 brew install --cask macdir
 xattr -dr com.apple.quarantine /Applications/MacDir.app
 ```
 
-The third line is required because MacDir is signed with a self-signed
-certificate rather than a Developer ID, so it is not notarized by Apple.
-Homebrew marks every download as quarantined and Gatekeeper refuses to launch
-an unnotarized quarantined app. `brew install` prints this same reminder.
-
-If you run Homebrew with `HOMEBREW_REQUIRE_TAP_TRUST` set, trust the tap first:
-
-```sh
-brew trust --tap illil/macdir
-```
-
 Requires macOS 14 (Sonoma) or later.
+
+Why four lines and not two:
+
+- **`brew trust`** — since Homebrew 6.0, `HOMEBREW_REQUIRE_TAP_TRUST` defaults to
+  on, so Homebrew refuses to load a cask from a third-party tap until you say you
+  trust it. Without this line `brew install` fails with
+  `Refusing to load cask ... from untrusted tap`. On Homebrew 5.x and earlier the
+  line is harmless.
+- **`xattr`** — MacDir is signed with a self-signed certificate rather than a
+  Developer ID, so it is not notarized by Apple. Homebrew marks every download as
+  quarantined and Gatekeeper refuses to launch an unnotarized quarantined app.
+  `brew install` prints this same reminder at the end. (The old
+  `brew install --no-quarantine` shortcut was removed in Homebrew 6.0.)
+
+Both lines go away once MacDir ships with Developer ID signing and notarization.
 
 ## Update
 
