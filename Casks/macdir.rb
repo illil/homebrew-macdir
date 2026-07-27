@@ -2,12 +2,16 @@ cask "macdir" do
   # version/sha256 are stamped by mac_dir's scripts/release.sh — edit through a
   # release, not by hand, so the checksum can never drift from the artifact.
   version "0.1.0"
-  sha256 "d384709aa122a6bd844c6cefff1eab90547df3e8ef88e5ff83061d1a11f8e3d3"
+  sha256 "9c9e09aaf4d88a4ce92de77bc6218c94bf694c1ca0c63a800a01d9c298bc9e47"
 
-  url "https://github.com/illil/MacDir/releases/download/v#{version}/MacDir-#{version}.zip"
+  # MacDir's source repo (illil/MacDir) is private, so its release assets are not
+  # downloadable without auth. Binaries ship from a public releases-only repo
+  # instead; homepage points there too so it resolves for users and so the url's
+  # host matches the homepage's (which is what lets audit skip `verified:`).
+  url "https://github.com/illil/MacDir-releases/releases/download/v#{version}/MacDir-#{version}.zip"
   name "MacDir"
   desc "Keyboard-first dual-pane file manager"
-  homepage "https://github.com/illil/MacDir"
+  homepage "https://github.com/illil/MacDir-releases"
 
   livecheck do
     url :url

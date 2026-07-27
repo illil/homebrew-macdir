@@ -48,12 +48,21 @@ discard them.
 
 ## Releasing (maintainer)
 
-This repository holds only the cask. Releases are cut from the app repository:
+Three repositories are involved:
+
+| Repository | Visibility | Holds |
+|---|---|---|
+| `illil/MacDir` | private | source |
+| `illil/MacDir-releases` | **public** | release zips only — a private repo's assets 404 for users |
+| `illil/homebrew-macdir` | **public** | this cask |
+
+Releases are cut from the source repository:
 
 ```sh
 cd ~/Projects/illil/mac_dir && scripts/release.sh <version>
 ```
 
-That script builds, signs, packages, verifies, and stamps the new `version` and
-`sha256` into `Casks/macdir.rb` here. It deliberately does not publish anything;
-it prints the `gh release create` and `git push` commands to run afterwards.
+That script builds, signs, packages, verifies the signature survives the zip
+round trip, and stamps the new `version` and `sha256` into `Casks/macdir.rb`
+here. It deliberately publishes nothing — it prints the `gh release create` and
+`git push` commands to run afterwards, so going live stays an explicit act.
