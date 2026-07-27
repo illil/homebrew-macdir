@@ -35,13 +35,14 @@ cask "macdir" do
   ]
 
   # MacDir is signed with a self-signed certificate, not a Developer ID, so it
-  # is not notarized. Homebrew quarantines every download and Gatekeeper blocks
-  # the first launch until the attribute is cleared. Stating it here means brew
-  # prints the fix at install time instead of the user hitting a dead end.
+  # is not notarized. Homebrew quarantines every download — upgrades included,
+  # not just the first install — and Gatekeeper refuses to launch until the
+  # attribute is cleared. Stating it here means brew prints the fix itself
+  # instead of the user hitting a dead end.
   # Drop this stanza once Developer ID + notarization ship.
   caveats <<~EOS
-    MacDir is not notarized yet, so macOS blocks the first launch.
-    Clear the quarantine attribute once:
+    MacDir is not notarized yet, so macOS blocks it from launching.
+    Clear the quarantine attribute after every install and upgrade:
 
       xattr -dr com.apple.quarantine /Applications/MacDir.app
   EOS

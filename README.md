@@ -32,8 +32,23 @@ Both lines go away once MacDir ships with Developer ID signing and notarization.
 ## Update
 
 ```sh
-brew upgrade --cask macdir
+brew update && brew upgrade --cask macdir
 ```
+
+`brew update` has to come first: it re-fetches this tap. Without it Homebrew
+still sees the cask revision it cloned last time and reports nothing to upgrade,
+however many releases have shipped since.
+
+Then clear the quarantine attribute again — an upgrade downloads a fresh zip and
+Homebrew quarantines it exactly as on first install:
+
+```sh
+xattr -dr com.apple.quarantine /Applications/MacDir.app
+```
+
+Your preferences, favorites, and notes are untouched by an upgrade. Because
+every build is signed with the same certificate, macOS also keeps the file-access
+permissions you already granted.
 
 ## Uninstall
 
