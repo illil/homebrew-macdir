@@ -21,6 +21,15 @@ cask "macdir" do
 
   app "MacDir.app"
 
+  # `brew uninstall --zap` only. Application Support holds user-authored notes
+  # (MacDir/NotesStore.swift), so zapping is genuinely destructive — plain
+  # `brew uninstall` leaves it alone.
+  zap trash: [
+    "~/Library/Application Support/MacDir",
+    "~/Library/Preferences/com.illil.macdir.plist",
+    "~/Library/Saved Application State/com.illil.macdir.savedState",
+  ]
+
   # MacDir is signed with a self-signed certificate, not a Developer ID, so it
   # is not notarized. Homebrew quarantines every download and Gatekeeper blocks
   # the first launch until the attribute is cleared. Stating it here means brew
@@ -32,13 +41,4 @@ cask "macdir" do
 
       xattr -dr com.apple.quarantine /Applications/MacDir.app
   EOS
-
-  # `brew uninstall --zap` only. Application Support holds user-authored notes
-  # (MacDir/NotesStore.swift), so zapping is genuinely destructive — plain
-  # `brew uninstall` leaves it alone.
-  zap trash: [
-    "~/Library/Application Support/MacDir",
-    "~/Library/Preferences/com.illil.macdir.plist",
-    "~/Library/Saved Application State/com.illil.macdir.savedState",
-  ]
 end
