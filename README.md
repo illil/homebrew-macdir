@@ -83,7 +83,7 @@ Three repositories are involved:
 Releases are cut from the source repository:
 
 ```sh
-cd ~/Projects/illil/mac_dir && scripts/release.sh <version>
+scripts/release.sh <version>
 ```
 
 That script builds, signs, packages, verifies the signature survives the zip
