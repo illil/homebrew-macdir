@@ -20,7 +20,8 @@ Why four lines and not two:
   on, so Homebrew refuses to load a cask from a third-party tap until you say you
   trust it. Without this line `brew install` fails with
   `Refusing to load cask ... from untrusted tap`. On Homebrew 5.x and earlier the
-  line is harmless.
+  line is harmless. Trust is recorded by name, so this is a one-time step — it
+  survives every later release of the cask.
 - **`xattr`** — MacDir is signed with a self-signed certificate rather than a
   Developer ID, so it is not notarized by Apple. Homebrew marks every download as
   quarantined and Gatekeeper refuses to launch an unnotarized quarantined app.
@@ -38,6 +39,14 @@ brew update && brew upgrade --cask macdir
 `brew update` has to come first: it re-fetches this tap. Without it Homebrew
 still sees the cask revision it cloned last time and reports nothing to upgrade,
 however many releases have shipped since.
+
+If you installed MacDir before Homebrew 6.0, you have no trust record yet, and
+an upgrade fails the same way a fresh install does — trust is checked when the
+cask is *read*, not when it is installed. Run this once:
+
+```sh
+brew update && brew trust --tap illil/macdir && brew upgrade --cask macdir
+```
 
 Then clear the quarantine attribute again — an upgrade downloads a fresh zip and
 Homebrew quarantines it exactly as on first install:
