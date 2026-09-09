@@ -1,8 +1,8 @@
 cask "macdir" do
   # version/sha256 are stamped by mac_dir's scripts/release.sh — edit through a
   # release, not by hand, so the checksum can never drift from the artifact.
-  version "0.1.4"
-  sha256 "f9cd77b6c18e8854e2e5cf6dfb3a678ca158be1a8cfe094b40d262bfadac084c"
+  version "0.2.0"
+  sha256 "bb9f5cb24505de17725b44ef02dedc145eb38766cb90da0ee6bf0e3117655aca"
 
   # MacDir's source repo (illil/MacDir) is private, so its release assets are not
   # downloadable without auth. Binaries ship from a public releases-only repo
