@@ -90,3 +90,39 @@ That script builds, signs, packages, verifies the signature survives the zip
 round trip, and stamps the new `version` and `sha256` into `Casks/macdir.rb`
 here. It deliberately publishes nothing — it prints the `gh release create` and
 `git push` commands to run afterwards, so going live stays an explicit act.
+
+### The pre-push check
+
+Pushing the cask is what makes a release visible to every user, and it is the
+one step that can succeed while the artifact it points at does not exist. 0.2.1
+shipped that way: `gh release create` attaches assets in three separate API
+calls — create the release as a draft, upload, publish — so an interrupted run
+leaves a draft with no asset and no tag. The cask went out pointing at it, and
+`brew upgrade` returned 404 for the next hour and a quarter.
+
+`scripts/verify-cask.sh` closes that gap. Install it once per clone, since git
+hooks are not cloned:
+
+```sh
+ln -sf ../../scripts/verify-cask.sh .git/hooks/pre-push
+```
+
+Before any push that changes `Casks/macdir.rb` it downloads what the cask points
+at and checks two things:
+
+- **the URL resolves** — catches a draft release, a missing or renamed asset, a
+  typo'd version
+- **the bytes' sha256 matches the cask** — catches a rebuild after stamping.
+  Xcode bundles embed timestamps, so a rebuild is never byte-identical; the
+  download then succeeds and `brew` refuses to install it
+
+A push that leaves the cask alone skips the download, so README edits stay
+instant. Run it against the working tree with no arguments:
+
+```sh
+scripts/verify-cask.sh
+```
+
+The check cannot live in mac_dir's `scripts/release.sh`: that script exits after
+stamping the cask and before the artifact is uploaded, so at the only moment it
+could look, the URL is legitimately still absent.
